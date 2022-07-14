@@ -2,8 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route; 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Api\UserAuthController;
+use App\Http\Controllers\AuthController; 
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +29,9 @@ Route::group([
         'middleware' => 'auth:api'
     ], function() {
         Route::get('signout', AuthController::class . '@signout');
-        Route::get('user', 'AuthController@user');
+        Route::get('user', AuthController::class . '@user');
+        Route::put('user', AuthController::class . '@update');
+        Route::delete('user', AuthController::class . '@destroy');
+        // Route::get('user', 'AuthController::class . @user');
     });
 });

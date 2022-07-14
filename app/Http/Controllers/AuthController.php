@@ -88,8 +88,36 @@ class AuthController extends Controller
      *
      * @return [json] user object
      */
+
     public function user(Request $request)
     {
         return response()->json($request->user());
     }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|string|email|unique:users,email,' . $request->user()->id,
+            'password' => 'required|string|confirmed'
+        ]);
+        $user = $request->user();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->save();
+        
+        return response()->json([
+            'message' => 'Successfully updated user!'
+        ]);
+    }
+
+    public function destroy(Request $request)
+    {
+        $request->user()->delete();
+        return response()->json([
+            'message' => 'Successfully deleted user!'
+        ]);
+    }
+
 }
