@@ -90,25 +90,33 @@ class AuthController extends Controller
      */
 
     public function user(Request $request)
-    {
+    { 
         return response()->json($request->user());
-    }
+    } 
 
     public function update(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|email|unique:users,email,' . $request->user()->id,
-            'password' => 'required|string|confirmed'
-        ]);
-        $user = $request->user();
-        $user->name = $request->name;
+        error_log(json_encode($request->all()));
+        try {
+            $request->validate([
+                'name' => 'required|string',
+                'email' => 'required|string|email|unique:users,email,' . $request->user()->id,
+                'password' => 'required|string|confirmed'
+            ]);
+        } catch (\Throwable $th) {
+            error_log($th->getMessage());
+        }
+        
+        $user = $request->user(); // get user from token
+        
+        $user->name = $request->name; 
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
         $user->save();
         
         return response()->json([
-            'message' => 'Successfully updated user!'
+            'message' => 'Successfully updated user!',
+            'user' => $user
         ]);
     }
 

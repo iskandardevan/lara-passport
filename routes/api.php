@@ -22,16 +22,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group([
     'prefix' => 'auth'
 ], function () {
-    Route::post('signin',AuthController::class . '@signin');
-    Route::post('signup', AuthController::class . '@signup');
+    Route::post('signin',AuthController::class . '@signin'); //Login    
+    Route::post('signup', AuthController::class . '@signup'); //Register
 
     Route::group([
         'middleware' => 'auth:api'
     ], function() {
-        Route::get('signout', AuthController::class . '@signout');
-        Route::get('user', AuthController::class . '@user');
-        Route::put('user', AuthController::class . '@update');
-        Route::delete('user', AuthController::class . '@destroy');
-        // Route::get('user', 'AuthController::class . @user');
+        Route::get('signout', AuthController::class . '@signout'); // Logout
+        Route::get('user', AuthController::class . '@user'); // get user info 
+        Route::put('user', AuthController::class . '@update'); // update user profile
+        Route::delete('user', AuthController::class . '@destroy'); // delete user
     });
 });
